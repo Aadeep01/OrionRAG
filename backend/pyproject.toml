@@ -1,0 +1,152 @@
+[project]
+name = "universal-doc-intelligence-backend"
+version = "0.1.0"
+description = "Backend for Universal Document Intelligence System"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "python-multipart>=0.0.6",
+    "pydantic>=2.5.3",
+    "pydantic-settings>=2.1.0",
+    "google-generativeai>=0.3.2",
+    "google-cloud-aiplatform>=1.38.1",
+    "qdrant-client>=1.7.0",
+    "psycopg2-binary>=2.9.9",
+    "sqlalchemy>=2.0.25",
+    "asyncpg>=0.29.0",
+    "pypdf>=4.0.0",
+    "pdfplumber>=0.10.3",
+    "python-docx>=1.1.0",
+    "openpyxl>=3.1.2",
+    "python-pptx>=0.6.23",
+    "Pillow>=10.2.0",
+    "pytesseract>=0.3.10",
+    "markdown>=3.5.1",
+    "chardet>=5.2.0",
+    "ebooklib>=0.18",
+    "langchain>=0.1.4",
+    "langchain-text-splitters>=0.0.1",
+    "tiktoken>=0.5.2",
+    "python-dotenv>=1.0.0",
+    "httpx>=0.26.0",
+    "aiofiles>=23.2.1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=7.4.0",
+    "httpx>=0.26.0",
+    "ruff>=0.8.0",
+    "mypy>=1.13.0",
+    "pytest-asyncio>=1.3.0",
+]
+
+# Ruff configuration (2025 best practices)
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "*.pyc",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "N",      # pep8-naming
+    "UP",     # pyupgrade
+    "ANN",    # flake8-annotations
+    "ASYNC",  # flake8-async
+    "S",      # flake8-bandit (security)
+    "B",      # flake8-bugbear
+    "A",      # flake8-builtins
+    "C4",     # flake8-comprehensions
+    "DTZ",    # flake8-datetimez
+    "T10",    # flake8-debugger
+    "EM",     # flake8-errmsg
+    "ISC",    # flake8-implicit-str-concat
+    "ICN",    # flake8-import-conventions
+    "PIE",    # flake8-pie
+    "PT",     # flake8-pytest-style
+    "Q",      # flake8-quotes
+    "RSE",    # flake8-raise
+    "RET",    # flake8-return
+    "SIM",    # flake8-simplify
+    "TID",    # flake8-tidy-imports
+    "ARG",    # flake8-unused-arguments
+    "PTH",    # flake8-use-pathlib
+    "ERA",    # eradicate
+    "PL",     # pylint
+    "RUF",    # ruff-specific rules
+]
+ignore = [
+    "ANN101",  # Missing type annotation for self
+    "ANN102",  # Missing type annotation for cls
+    "ANN401",  # Dynamically typed expressions (Any) are disallowed
+    "S101",    # Use of assert detected (OK in tests)
+    "PLR0913", # Too many arguments
+    "B008",    # Do not perform function call in argument defaults (FastAPI Depends)
+    "ARG001",  # Unused function argument (FastAPI request handlers)
+    "ASYNC230", # Async file operations (acceptable for small files)
+    "PTH",     # Use pathlib (gradual migration)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]  # Unused imports OK in __init__.py
+"tests/*" = ["S101", "ARG", "PLR2004"]  # Allow asserts and magic values in tests
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+# Mypy configuration (2025 strict mode)
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = false  # FastAPI decorators
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = [
+    "google.generativeai",
+    "qdrant_client.*",
+    "langchain.*",
+    "langchain_text_splitters.*",
+    "PyPDF2.*",
+    "pdfplumber.*",
+    "docx.*",
+    "pptx.*",
+    "openpyxl.*",
+    "ebooklib.*",
+]
+ignore_missing_imports = true
+
